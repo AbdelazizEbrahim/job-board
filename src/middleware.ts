@@ -7,7 +7,8 @@ export default authkitMiddleware();
 export const config = { 
     matcher: [
         '/',
-        '/new-listing/:orgId*', // Match dynamic segments for new-listing
+        '/:path*',
+        '/new-listing/:orgId*', 
         '/new-company',
     ] 
 };
