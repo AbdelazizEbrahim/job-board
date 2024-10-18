@@ -18,6 +18,7 @@ export default function ImageUpload({name, icon }: {name:string; icon: IconDefin
         if (input && input.files?.length && input.files.length > 0) {
             const file = input.files[0];
             const data = new FormData();
+            console.log("data", data)
             data.set("file", file);
         
             const response = await axios.post('/api/upload', data);
