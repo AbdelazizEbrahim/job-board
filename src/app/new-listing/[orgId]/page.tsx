@@ -29,7 +29,7 @@ export default async function NewListingFormPage (props: PageProps) {
   
   return (
    <div className=''>
-    <JobForm/>
+    <JobForm orgId={orgId}/>
    </div>
   )
 }
