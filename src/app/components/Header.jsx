@@ -14,7 +14,7 @@ export default async function Header() {
             <Link className="font-bold text-xl " href={'/'}>Job Board</Link>
             <nav className="flex gap-2">
                 {!user && (
-                    <Link href={signInUrl} className="bg-gray-200 px-4 py-2 rounded-md">Login</Link>
+                    <Link href={signInUrl} className="px-2 py-1 bg-gray-200 sm:px-4 sm:py-2 rounded-md">Login</Link>
                 )}
                 {user && (
                   <form action={async () => {
@@ -24,7 +24,7 @@ export default async function Header() {
                     <button type="submit" className="px-4 py-2 rounded-md bg-gray-200">Logout</button>
                   </form>
                 )}
-                <Link href={'/new-listing'} className="px-4 py-2 rounded-md bg-blue-500 text-white">Post Job</Link>
+                <Link href={'/new-listing'} className="px-2 py-1 sm:px-4 sm:py-2 rounded-md bg-blue-500 text-white">Post Job</Link>
             </nav>
         </div>
       </header>

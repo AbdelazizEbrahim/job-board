@@ -1,8 +1,11 @@
+'use client'
+
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import TimeAgo from 'react-timeago'
 
-const JobRows = () => {
+const JobRows = ({jobDoc}) => {
   return (
     <>
       <div className='bg-white p-4 rounded-lg shadow-sm  relative'>
@@ -19,15 +22,17 @@ const JobRows = () => {
           </div>
           <div className='grow sm:flex'>
             <div className='grow'>
-              <div className='text-gray-500 text-sm'>Spotify1</div>
-              <div className='font-bold text-lg mb-1'>Product Designer</div>
+              <div className='text-gray-500 text-sm'>{jobDoc.orgName}</div>
+              <div className='font-bold text-lg mb-1'>{jobDoc.title}</div>
               <div className='text-gray-400 text-sm'>
                 Remote &middot; Addis Ababa, ETH, &middot; Full-time
               </div>
             </div>
-            <div className='content-end text-gray-500 text-sm'>
-              2 weeks age
-            </div>
+            {jobDoc.createdAt && (
+              <div className='content-end text-gray-500 text-sm'>
+                <TimeAgo date={jobDoc.createdAt}/>
+              </div>
+            )}
           </div>
         </div>
       </div>     

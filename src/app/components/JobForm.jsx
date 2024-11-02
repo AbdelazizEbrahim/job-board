@@ -15,8 +15,10 @@ import {
 import "react-country-state-city/dist/react-country-state-city.css";
 import ImageUpload from './ImageUpload';
 import { saveJobAction } from '../actions/jobActions';
+import { useRouter } from 'next/navigation';
 
 export default function JobForm({ orgId }) {
+  const router = useRouter(); 
   const [countryId, setCountryId] = useState(0);
   const [stateId, setStateId] = useState(0);
   const [, setCityId] = useState(0);
@@ -24,7 +26,6 @@ export default function JobForm({ orgId }) {
   const [stateName, setStateName] = useState('');
   const [cityName, setCityName] = useState('');
 
-  // Updated handleSaveJob to handle FormData
   async function handleSaveJob(event) {
     event.preventDefault(); // Prevent default form submission
 
@@ -38,7 +39,11 @@ export default function JobForm({ orgId }) {
 
     // Call the saveJobAction
     const jobDoc = await saveJobAction(formData);
-    console.log("job doc: ", jobDoc);
+
+    // Redirect to the home page upon successful save
+    if (jobDoc) {
+      router.push(`/jobs/${orgId}`);
+    }
   }
 
   return (
@@ -48,7 +53,7 @@ export default function JobForm({ orgId }) {
         className='container mt-6 flex flex-col gap-4'
       >
         <TextField.Root name='title' placeholder='Job title'/>
-        <div className='grid grid-cols-3 gap-6 *:grow'>
+        <div className='grid sm:grid-cols-3 gap-6 *:grow'>
           <div>
             Remote?
             <RadioGroup.Root defaultValue='hybrid' name='remote'>
@@ -80,7 +85,7 @@ export default function JobForm({ orgId }) {
         </div>
         <div >
             Location
-            <div className='flex gap-4 *:grow'>
+            <div className='flex flex-col sm:flex-row gap-4 *:grow'>
             <CountrySelect
               onChange={(e) => {
                 setCountryId(e.id);
@@ -110,7 +115,7 @@ export default function JobForm({ orgId }) {
             />
           </div>
         </div>
-        <div className='flex'>
+        <div className='sm:flex'>
           <div className='w-1/3'>
             <h3>Job Icon</h3>
             <ImageUpload name='jobIcon' icon={faStar}/>
@@ -120,20 +125,20 @@ export default function JobForm({ orgId }) {
             <h3> Contact Person</h3>
             <div className='flex gap-2'>
               <div>
-                <ImageUpload name='personPhoto' icon={faUser}/>
+                <ImageUpload name='contactPhoto' icon={faUser}/>
               </div>
               <div className='grow flex flex-col gap-1'>
-              <TextField.Root placeholder='John Doe' type='text' name='name'>
+              <TextField.Root placeholder='John Doe' type='text' name='contactName'>
                   <TextField.Slot>
                     <FontAwesomeIcon icon={faUser}/>
                   </TextField.Slot>
                 </TextField.Root>                
-                <TextField.Root placeholder='Phone' type='tel' name='phone'>
+                <TextField.Root placeholder='Phone' type='tel' name='contactPhone'>
                   <TextField.Slot>
                     <FontAwesomeIcon icon={faPhone}/>
                   </TextField.Slot>
                 </TextField.Root>
-                <TextField.Root placeholder='Email' type='email' name='email'>
+                <TextField.Root placeholder='Email' type='email' name='contactEmail'>
                   <TextField.Slot>
                     <FontAwesomeIcon icon={faEnvelope}/>
                   </TextField.Slot>

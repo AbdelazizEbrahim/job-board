@@ -10,12 +10,10 @@ const JobSchema = new Schema({
     city: {type: String, required: true},
     jobIcon: {type: String},
     orgId: {type: String, required: true},
-    contactPerson: new Schema({
-        photo: {type: String},
-        name:{type: String, required: true},
-        phone: {type: String, required: true},
-        email:{type: String, required: true}
-    }),
-});
+    contactPhoto: {type: String},
+    contactName:{type: String, required: true},
+    contactPhone: {type: String, required: true},
+    contactEmail:{type: String, required: true}
+}, { timestamps: true });
 
 export const JobModel = models.Job || model('Job', JobSchema);

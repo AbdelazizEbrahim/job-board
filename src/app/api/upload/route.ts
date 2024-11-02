@@ -21,44 +21,35 @@ export async function POST(req: NextRequest) {
 
     // Generate a unique file name
     const newFileName = `${uniqid()}-${file.name}`;
-    console.log("Generated unique file name:", newFileName);
     
     // Create a storage reference in Firebase with the new file name
     const storageRef = ref(storage, `uploads/jobimages/${newFileName}`);
-    console.log("Firebase storage reference created:", storageRef);
 
     // Read the file as a buffer (handling stream properly)
     const chunks: Uint8Array[] = [];
     const reader = file.stream().getReader();
-    console.log("File stream reader initialized.");
 
     // Loop through the stream and collect chunks
     while (true) {
       const { done, value } = await reader.read();
       if (done) {
-        console.log("File reading completed.");
         break;
       }
       if (value) {
         chunks.push(value); // value is Uint8Array
-        console.log("Chunk added:", value);
       }
     }
 
     const buffer = Buffer.concat(chunks);
-    console.log("Buffer created from chunks:", buffer);
 
     // Upload the file to Firebase Storage
     const snapshot = await uploadBytes(storageRef, buffer, {
       contentType: file.type,
     });
-    console.log("File uploaded to Firebase storage:", snapshot);
 
-    // Get the download URL for the uploaded file
     const url = await getDownloadURL(snapshot.ref);
     console.log("Download URL retrieved:", url);
 
-    // Return the file name and URL in the response
     return NextResponse.json({
       newFileName,
       url,
