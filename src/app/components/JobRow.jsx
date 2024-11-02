@@ -26,10 +26,12 @@ export default function JobRows ({jobDoc}) {
           </div>
           <div className='grow sm:flex'>
             <div className='grow'>
-              <div className='text-gray-500 text-sm'>
+              <div className='hover:underline text-gray-500 text-sm'>
                 <Link href={`jobs/${jobDoc.orgId}`}>{jobDoc.orgName || '?'}</Link>
               </div>
-              <div className='font-bold text-lg mb-1'>{jobDoc.title}</div>
+              <div className='font-bold text-lg mb-1'>
+                <Link className='hover:underline' href={'/show/'+jobDoc._id}>{jobDoc.title}</Link>
+              </div>
               <div className='text-gray-400 text-sm capitalize'>
                 {jobDoc.remote}
                 {' '} &middot; {' '}
