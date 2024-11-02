@@ -1,6 +1,7 @@
 import Jobs from "@/app/components/Jobs";
-import { JobModel } from "@/models/JobModel";
-import { WorkOS } from "@workos-inc/node";
+import { addOrgAndUserData, JobModel } from "@/models/JobModel";
+import { withAuth } from "@workos-inc/authkit-nextjs";
+import { AutoPaginatable, OrganizationMembership, WorkOS } from "@workos-inc/node";
 import mongoose from "mongoose";
 
 type PageProps = {
@@ -10,22 +11,20 @@ type PageProps = {
 };
 
 
-export default async function CompanyJObsPage(props:PageProps){
+export default async function CompanyJobsPage(props:PageProps){
     const workos = new WorkOS(process.env.WORKOS_API_KEY);
     const org = await workos.organizations.getOrganization(props.params.orgId);
+    const {user} = await withAuth();
     await mongoose.connect(process.env.MONGODB_URI as string);
-    const jobDocs =JSON.parse(JSON.stringify( await JobModel.find({orgId: org.id})));
-    // const orgs = [];
-    for (const job of jobDocs) {
-        const org = await workos.organizations.getOrganization(job.orgId);
-        job.orgName = org.name;
-    }
+    let jobsDocs =JSON.parse(JSON.stringify( await JobModel.find({orgId: org.id})));
+    jobsDocs = await addOrgAndUserData(jobsDocs, user);
+
     return(
         <div>
             <div className="container">
                 <h1 className="text-xl my-6">{org.name} Jobs</h1>
             </div>
-            <Jobs jobs={jobDocs} header={"Job posted by " + org.name}/>
-        </div>
+            <Jobs jobs={jobsDocs} header={"Job posted by " + org.name}/>
+        </div> 
     )
 }

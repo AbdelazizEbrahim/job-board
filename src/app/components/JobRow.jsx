@@ -3,9 +3,13 @@
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import TimeAgo from 'react-timeago'
+import TimeAgo from './TimeAgo'
+import Link from 'next/link'
+import axios from 'axios';
 
-const JobRows = ({jobDoc}) => {
+
+export default function JobRows ({jobDoc}) {
+
   return (
     <>
       <div className='bg-white p-4 rounded-lg shadow-sm  relative'>
@@ -22,15 +26,36 @@ const JobRows = ({jobDoc}) => {
           </div>
           <div className='grow sm:flex'>
             <div className='grow'>
-              <div className='text-gray-500 text-sm'>{jobDoc.orgName}</div>
+              <div className='text-gray-500 text-sm'>
+                <Link href={`jobs/${jobDoc.orgId}`}>{jobDoc.orgName || '?'}</Link>
+              </div>
               <div className='font-bold text-lg mb-1'>{jobDoc.title}</div>
-              <div className='text-gray-400 text-sm'>
-                Remote &middot; Addis Ababa, ETH, &middot; Full-time
+              <div className='text-gray-400 text-sm capitalize'>
+                {jobDoc.remote}
+                {' '} &middot; {' '}
+                {jobDoc.city}, {jobDoc.country}
+                {' '} &middot;{' '}
+                {jobDoc.type}-time
+                {jobDoc.isAdmin && (
+                  <>
+                    {' '} &middot; {' '}
+                    <Link href={'/jobs/edit/' + jobDoc._id}>Edit</Link>
+                    {' '} &middot; {' '}
+                    <button
+                      type='button'
+                      onClick={async () => {
+                        await axios.delete('/api/jobs?id='+jobDoc._id);
+                        window.location.reload();
+                      }}>
+                        Delete
+                    </button>
+                  </>
+                )}
               </div>
             </div>
             {jobDoc.createdAt && (
               <div className='content-end text-gray-500 text-sm'>
-                <TimeAgo date={jobDoc.createdAt}/>
+                <TimeAgo createdAt={jobDoc.createdAt}/>
               </div>
             )}
           </div>
@@ -40,4 +65,3 @@ const JobRows = ({jobDoc}) => {
   )
 }
 
-export default JobRows

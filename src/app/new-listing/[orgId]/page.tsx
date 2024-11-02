@@ -28,9 +28,9 @@ export default async function NewListingFormPage (props: PageProps) {
   }
   
   return (
-   <div className=''>
-    <JobForm orgId={orgId}/>
-   </div>
-  )
+    <div className="">
+      <JobForm orgId={orgId} jobDoc={{}} />
+    </div>
+  );
 }
 
